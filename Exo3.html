@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+    <head>
+
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- Javascript -->
+        <script src="assets/js/main.js" defer></script>
+        <!-- Css -->
+        <link rel="stylesheet" href="assets/css/style.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+        <title>TODO list</title>
+    </head>
+        <body>
+        </body>
+
+</html>
+<Script>
+   // Méthode de remplissage 1    
+    // $('body').html('<h1>Ma super liste</h1><ol><li>Tache 1</li><li>Tache 2</li><li>Tache 3</li><li>Tache 4</li><li>Tache 5</li></ol> <ol><li>Tache 1</li><li>Tache 2</li><li>Tache 3</li><li>Tache 4</li><li>Tache 5</li></ol>');
+    
+// Méthode de remplissage 2
+// .append ajoute à la fin
+// .prepend ajoute comme premier du même type
+// (type).prependTo(cible) ajoute type au tout début de cible
+$('body').append('<h1>Ma super liste</h1>');
+    $('body').append('<ol></ol>');
+    $('body').append('<ol></ol>');
+    // $('<ol></ol>').prependTo('body');
+    $('ol').append('<li>Tache 1</li>');
+    $('ol').append('<li>Tache 2</li>');
+    $('ol').prepend('<li>Tache 3</li>');
+    $('ol').append('<li>Tache 4</li>');
+    $('ol').append('<li>Tache 5</li>');
+
+// Changement des valeurs
+    $('li')[0].innerHTML = "Première tache";
+    $('li:eq(1)').html("Deuxième tache");
+    $('li')[2].innerHTML = "Troisième tache";
+    $('li')[3].innerHTML = "Quatrième tache";
+    $('li:nth-child(5)').html('Cinquième tache');
+
+// Test des raccourcis    
+    $('h1')
+        .before('Ceci est l\'utilisation du .before. Et du .after pour le hr. Et du .css pour le style du h1.')
+        .after('<hr/>')
+        .css({color:'red', border:'2px solid gray', background: 'blue' });
+
+// Test du .text()        
+    var testText = $('h1').text();
+    $('hr').after('<p></p>');
+    $('p').append(testText);
+
+// .wrapAll rassemble tous les éléments ol dans une div
+    // $('ol').wrapAll('<div></div>');
+
+// Les événements
+    $('h1').on('click', function(){
+        $('ol').toggle();
+    });
+
+    $('h1').on('mouseenter', function(){
+        $('ol').hide();
+    });
+    $('h1').on('mouseleave', function(){
+        $('ol').show();
+    });
+// // Ajout d'un bouton + ajout d'une tache au click avec incrémentation
+//     let i = 0;
+//     $('body').append('<button>Ajouter une tache</button>');
+//     $('button').on('click', function(){
+//         $('ol').append('<li>Nouvelle tache '+ i +'</li>');
+//         i++;
+//     });
+    
+// Ajout d'un bouton + ajout d'une tache avec lecture d'input au click
+    $('ol:last').after('<button>Ajouter une tache</button>');
+    $('button').after('<input type="text" id="monInput"></input>');
+    $('button').attr('id', 'ajoutTache');
+    $('#ajoutTache').on('click', function(){
+        let tache = $('#monInput').val();
+        $('ol').append('<li>'+tache+'</li>');
+    });
+</script>

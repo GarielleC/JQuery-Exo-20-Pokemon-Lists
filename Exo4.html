@@ -1,0 +1,39 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Javascript -->
+<script src="assets/js/main.js" defer></script>
+<!-- Css -->
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<title>TODO list</title>
+</head>
+<body>
+</body>
+
+</html>
+<script>
+  function masquer(){
+        $(this).hide();
+    }
+
+    $('body').html('<h1>avant après</h1>');
+    $('h1').after('<ol></ol>');
+    $('ol').html('<li>Une chose à faire</li>');
+    $('ol').append('<li>Une autre chose à faire</li>');
+    $('ol').prepend('<li>Une première chose à faire</li>');
+    $('ol').after('<button id="newTask">Ajouter</button>');
+    $('button').after('<input type="text" id="myTask"></input>');
+    $('li').css({'color': 'red'});
+
+    $('#newTask').on('click', function () {
+        let newTask = $('#myTask').val();
+        let taskItem = $('<li>' + newTask + '</li>');
+        taskItem.on('click', masquer);
+        $('ol').append(taskItem);
+    });
+    $('input').after('<button id="delete">Delete done</button>');
+    $('#delete').on('click', function () {
+    });
+    </script>
+    
+

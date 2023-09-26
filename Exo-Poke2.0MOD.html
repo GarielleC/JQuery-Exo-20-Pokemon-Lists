@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <title>Exemple</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-style: solid;
+        }
+        td, th {
+            text-align: center;
+            border-style: solid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokemons</h1>
+    <table id="pokemon-table" class="pokemon-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les données des Pokémon seront insérées ici -->
+        </tbody>
+    </table>
+</body>
+</html>
+<script>
+    let tableRows = [];
+$.ajax({
+    url: "https://pokeapi.co/api/v2/pokemon?limit=20",
+    type: "GET",
+    success: function(data) {
+        $.each(data.results, function(index, pokemon) {
+            $.ajax({
+                url: pokemon.url,
+                type: "GET",
+                success: function(pokeData) {
+                    $.ajax({
+                        url: pokeData.species.url,
+                        type: "GET",
+                        success: function(speciesData) {
+                            const frenchName = speciesData.names.find(name => name.language.name === 'fr').name;
+                            const frenchFlavorText = speciesData.flavor_text_entries.find(text => text.language.name === 'fr');
+                            let newRow = $("<tr></tr>");
+
+
+                            newRow.append("<td>" + pokeData.id + "</td>");
+                            newRow.append("<td>" + pokeData.name + "</td>");
+                            newRow.append("<td>" + frenchName + "</td>");
+                            newRow.append("<td>" + (frenchFlavorText ? frenchFlavorText.flavor_text : 'N/A') + "</td>");
+                            newRow.append("<td><img src='" + pokeData.sprites.front_default + "' /></td>");
+
+                            tableRows.push({id: pokeData.id, row: newRow});
+
+                            if (tableRows.length === data.results.length) {
+                                // Trie les lignes par ID
+                                tableRows.sort((a, b) => a.id - b.id);
+
+                                // Ajoute les lignes triées au tableau
+                                tableRows.forEach(rowObj => {
+                                    $("#pokemon-table tbody").append(rowObj.row);
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+});
+</script>

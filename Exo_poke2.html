@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <title>Exemple</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-style: solid;
+        }
+        td, th {
+            text-align: center;
+            border-style: solid;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pokemons</h1>
+    <table id="pokemon-table" class="pokemon-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Nom</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Les données des Pokémon seront insérées ici -->
+        </tbody>
+    </table>
+</body>
+</html>
+<script>
+    $.ajax({
+        url: "https://pokeapi.co/api/v2/pokemon?limit=20",  // Limite à 20 Pokémon pour cet exemple
+        type: "GET",
+        success: function(data) {
+            // Boucle à travers chaque Pokémon
+            $.each(data.results, function(index, pokemon) {
+                // Récupérer des informations supplémentaires pour chaque Pokémon
+                $.ajax({
+                    url: pokemon.url,
+                    type: "GET",
+                    success: function(pokeData) {
+                        // Récupérer le nom en français
+                        $.ajax({
+                            url: pokeData.species.url,
+                            type: "GET",
+                            success: function(speciesData) {
+                                const frenchName = speciesData.names.find(name => name.language.name === 'fr').name;
+
+                                // Création d'une nouvelle ligne de tableau pour ce Pokémon
+                                let newRow = $("<tr></tr>");
+
+                                // Ajout de l'ID, du nom, du nom en français et de l'image du Pokémon à la nouvelle ligne
+                                newRow.append("<td>" + pokeData.id + "</td>");
+                                newRow.append("<td>" + pokeData.name + "</td>");
+                                newRow.append("<td>" + frenchName + "</td>");
+                                newRow.append("<td><img src='" + pokeData.sprites.front_default + "' /></td>");
+
+                                // Ajout de la nouvelle ligne au tableau
+                                $("#pokemon-table tbody").append(newRow);
+                            }
+                        });
+                    }
+                });
+            });
+        }
+    });
+</script>
